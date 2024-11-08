@@ -1,0 +1,72 @@
+using Elsa.Extensions;
+using Elsa.Workflows.Activities;
+using Elsa.Workflows.Management.Entities;
+using Elsa.Workflows.State;
+
+namespace Elsa.Workflows.Management.Mappers;
+
+/// <summary>
+/// Maps a workflow state to a workflow instance.
+/// </summary>
+public class WorkflowStateMapper
+{
+    /// <summary>
+    /// Maps a workflow state to a workflow instance.
+    /// </summary>
+    public WorkflowInstance? Map(WorkflowState? source)
+    {
+        if (source == null)
+            return default;
+
+        var workflowInstance = new WorkflowInstance
+        {
+            Id = source.Id,
+            CreatedAt = source.CreatedAt,
+            DefinitionId = source.DefinitionId,
+            DefinitionVersionId = source.DefinitionVersionId,
+            Version = source.DefinitionVersion,
+            ParentWorkflowInstanceId = source.ParentWorkflowInstanceId,
+            Status = source.Status,
+            SubStatus = source.SubStatus,
+            CorrelationId = source.CorrelationId,
+            IncidentCount = source.Incidents.Count,
+            IsSystem = source.IsSystem,
+            UpdatedAt = source.UpdatedAt,
+            FinishedAt = source.FinishedAt,
+            WorkflowState = source
+        };
+        
+        if (source.Properties.TryGetValue<string>(SetName.WorkflowInstanceNameKey, out var name))
+            workflowInstance.Name = name;
+
+        return workflowInstance;
+    }
+
+    /// <summary>
+    /// Maps a workflow instance to a workflow state.
+    /// </summary>
+    public WorkflowState? Map(WorkflowInstance? source)
+    {
+        if (source == null)
+            return default;
+
+        var workflowState = source.WorkflowState;
+        workflowState.Id = source.Id;
+        workflowState.CreatedAt = source.CreatedAt;
+        workflowState.DefinitionId = source.DefinitionId;
+        workflowState.DefinitionVersionId = source.DefinitionVersionId;
+        workflowState.DefinitionVersion = source.Version;
+        workflowState.ParentWorkflowInstanceId = source.ParentWorkflowInstanceId;
+        workflowState.Status = source.Status;
+        workflowState.SubStatus = source.SubStatus;
+        workflowState.CorrelationId = source.CorrelationId;
+        workflowState.UpdatedAt = source.UpdatedAt;
+        workflowState.FinishedAt = source.FinishedAt;
+        workflowState.IsSystem = source.IsSystem;
+
+        if (source.Name != null)
+            workflowState.Properties[SetName.WorkflowInstanceNameKey] = source.Name;
+
+        return workflowState;
+    }
+}

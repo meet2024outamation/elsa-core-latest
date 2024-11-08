@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>
+            Provides EF Core migrations for Quartz.NET.
+        </Description>
+        <PackageTags>elsa module scheduling quartz ef core migrations</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AppAny.Quartz.EntityFrameworkCore.Migrations.PostgreSQL" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+        <PackageReference Include="Quartz.Serialization.Json" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net7.0'">
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" VersionOverride="7.0.18" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" VersionOverride="8.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Elsa.EntityFrameworkCore.Common\Elsa.EntityFrameworkCore.Common.csproj" />
+        <ProjectReference Include="..\Elsa.Quartz\Elsa.Quartz.csproj" />
+    </ItemGroup>
+
+</Project>
